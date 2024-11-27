@@ -1,17 +1,13 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
-
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: "black",
         headerShown: false,
         tabBarStyle: Platform.select({
           ios: {
@@ -26,12 +22,15 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Home",
+          headerShown: true,
+          tabBarIcon: () => <Ionicons name="home" />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="(explore)"
         options={{
           title: "Explore",
+          tabBarIcon: () => <Ionicons name="compass" />,
         }}
       />
     </Tabs>
