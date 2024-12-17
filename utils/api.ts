@@ -1,9 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
-import { FINANCES_API } from "@env";
 
 const api = axios.create({
-    baseURL: FINANCES_API,
+    baseURL: process.env.EXPO_PUBLIC_FINANCES_API,
     timeout: 10000,
 });
 

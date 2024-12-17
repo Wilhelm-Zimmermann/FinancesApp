@@ -3,8 +3,8 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "cross-env NODE_ENV=dev npx expo start --clear --port=9090",
-    "start:mobile": "cross-env NODE_ENV=test npx expo start --clear --port=9090",
+    "start": "dotenv -e .env.dev npx expo start -c --port=9090",
+    "start:mobile": "dotenv -e .env.test npx expo start -c --port=9090",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",

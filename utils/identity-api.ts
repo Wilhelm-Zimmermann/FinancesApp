@@ -1,8 +1,7 @@
 import axios, { AxiosResponse } from "axios";
-import { IDENTITY_API } from "@env";
 
 const identityApi = axios.create({
-    baseURL: IDENTITY_API,
+    baseURL: process.env.EXPO_PUBLIC_IDENTITY_API,
     timeout: 10000,
 });
 

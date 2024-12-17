@@ -12,61 +12,58 @@ export default function TabLayout() {
   }
 
   return (
-    // <Tabs
-    //   screenOptions={{
-    //     tabBarActiveTintColor: "black",
-    //     headerShown: false,
-    //     tabBarStyle: Platform.select({
-    //       ios: {
-    //         position: "absolute",
-    //       },
-    //       default: {},
-    //     }),
-    //   }}
-    // >
-    //   <Tabs.Screen
-    //     name="index"
-    //     options={{
-    //       title: "Home",
-    //       headerShown: true,
-    //       tabBarIcon: ({ focused }) => (
-    //         <Ionicons size={18} name={focused ? "home" : "home-outline"} />
-    //       ),
-    //       tabBarLabelStyle: {
-    //         fontSize: 11,
-    //       },
-    //     }}
-    //   />
-    //   <Tabs.Screen
-    //     name="(explore)"
-    //     options={{
-    //       title: "Explore",
-    //       tabBarIcon: ({ focused }) => (
-    //         <Ionicons
-    //           size={18}
-    //           name={focused ? "compass" : "compass-outline"}
-    //         />
-    //       ),
-    //       tabBarLabelStyle: {
-    //         fontSize: 11,
-    //       },
-    //     }}
-    //   />
-    //   <Tabs.Screen
-    //     name="(user)"
-    //     options={{
-    //       title: "User Profile",
-    //       tabBarIcon: ({ focused }) => (
-    //         <Ionicons size={18} name={focused ? "person" : "person-outline"} />
-    //       ),
-    //       tabBarLabelStyle: {
-    //         fontSize: 11,
-    //       },
-    //     }}
-    //   />
-    // </Tabs>
-    <View>
-      <Text>FOF</Text>
-    </View>
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: "black",
+        headerShown: false,
+        tabBarStyle: Platform.select({
+          ios: {
+            position: "absolute",
+          },
+          default: {},
+        }),
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "Home",
+          headerShown: true,
+          tabBarIcon: ({ focused }) => (
+            <Ionicons size={18} name={focused ? "home" : "home-outline"} />
+          ),
+          tabBarLabelStyle: {
+            fontSize: 11,
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="(explore)"
+        options={{
+          title: "Explore",
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              size={18}
+              name={focused ? "compass" : "compass-outline"}
+            />
+          ),
+          tabBarLabelStyle: {
+            fontSize: 11,
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="(user)"
+        options={{
+          title: "User Profile",
+          tabBarIcon: ({ focused }) => (
+            <Ionicons size={18} name={focused ? "person" : "person-outline"} />
+          ),
+          tabBarLabelStyle: {
+            fontSize: 11,
+          },
+        }}
+      />
+    </Tabs>
   );
 }

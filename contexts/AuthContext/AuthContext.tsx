@@ -4,7 +4,6 @@ import { UserLogin } from "./UserLogin";
 import { LoginResponse } from "./LoginResponse";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { TOKEN_SECRET, FINANCES_API } from "@env";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -26,7 +25,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       userLoginBody.append("username", "will");
       userLoginBody.append("password", "Will123$");
       userLoginBody.append("client_id", "postman");
-      userLoginBody.append("client_secret", TOKEN_SECRET ?? "");
+      userLoginBody.append(
+        "client_secret",
+        process.env.EXPO_PUBLIC_TOKEN_SECRET ?? ""
+      );
       userLoginBody.append("scope", "openid profile financeApp");
 
       const { access_token } = (
