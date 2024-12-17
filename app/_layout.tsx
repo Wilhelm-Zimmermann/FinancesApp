@@ -1,8 +1,10 @@
+import { AuthProvider } from "@/contexts/AuthContext/AuthContext";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { Text, View } from "react-native";
 import "react-native-reanimated";
 
 SplashScreen.preventAutoHideAsync();
@@ -23,11 +25,9 @@ export default function RootLayout() {
   }
 
   return (
-    <>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </>
+    <AuthProvider>
+      <Slot />
+      <StatusBar style="dark" />
+    </AuthProvider>
   );
 }
