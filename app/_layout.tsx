@@ -1,10 +1,10 @@
 import { AuthProvider } from "@/contexts/AuthContext/AuthContext";
+import { ThemeProvider } from "@/contexts/ThemeContext/ThemeContext";
 import { useFonts } from "expo-font";
 import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { Text, View } from "react-native";
 import "react-native-reanimated";
 
 SplashScreen.preventAutoHideAsync();
@@ -25,9 +25,11 @@ export default function RootLayout() {
   }
 
   return (
-    <AuthProvider>
-      <Slot />
-      <StatusBar style="dark" />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <Slot />
+        <StatusBar style="dark" />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
