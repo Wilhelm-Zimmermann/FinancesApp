@@ -38,6 +38,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           },
         })
       ).data;
+
       console.log(access_token);
 
       AsyncStorage.setItem("user_token", access_token);

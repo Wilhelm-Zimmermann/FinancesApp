@@ -38,13 +38,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="(explore)"
+        name="(bill)"
         options={{
-          title: "Explore",
+          title: "Contas",
           tabBarIcon: ({ focused }) => (
             <Ionicons
               size={18}
-              name={focused ? "compass" : "compass-outline"}
+              name={focused ? "newspaper" : "newspaper-outline"}
             />
           ),
           tabBarLabelStyle: {
@@ -55,7 +55,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(user)"
         options={{
-          title: "User Profile",
+          title: "Perfil",
           tabBarIcon: ({ focused }) => (
             <Ionicons size={18} name={focused ? "person" : "person-outline"} />
           ),

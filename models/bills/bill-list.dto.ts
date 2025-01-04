@@ -1,4 +1,5 @@
 export interface BillListDto {
+    id: string;
     name: string;
     price: number;
     description: string;
@@ -6,4 +7,5 @@ export interface BillListDto {
     paidDate: string;
     billTypeId: string;
     userId: string;
+    transactionType: string;
 }
