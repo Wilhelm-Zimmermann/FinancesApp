@@ -1,38 +1,46 @@
 import { BillListItem } from "@/components/bills/BillListItem";
+import { useBills } from "@/contexts/BillsContext/BillContext";
 import { useTheme } from "@/contexts/ThemeContext/ThemeContext";
-import { BillListDto } from "@/models/bills/bill-list.dto";
-import { GenericApiResponse } from "@/models/GenericApiResponse";
-import api from "@/utils/api";
-import { useCallback, useEffect, useState } from "react";
-import { Button, FlatList, StyleSheet, Text, View } from "react-native";
+import { IBillListSearchParams } from "@/models/bills/bill-list-searcParams";
+import { createSearchParams } from "@/utils/createSearchParams";
+import { useCallback, useState } from "react";
+import { Button, FlatList, StyleSheet, View } from "react-native";
 
 export default function BillListScreen() {
-  const [bills, setBills] = useState<BillListDto[]>([]);
   const { theme } = useTheme();
+  const { bills, getBills } = useBills();
+  const [billSearchParams, setBillSearchParams] =
+    useState<IBillListSearchParams>({} as IBillListSearchParams);
 
-  const getBills = useCallback(async () => {
-    try {
-      const billsData = (
-        await api.get<GenericApiResponse<BillListDto[]>>("/bills/list")
-      ).data?.data;
+  const handleSearchParamsUpdate = useCallback(
+    (param: keyof IBillListSearchParams, value: any) => {
+      setBillSearchParams((prevState) => {
+        const updatedParams = {
+          ...prevState,
+          [param]: value,
+        };
 
-      setBills(billsData);
-    } catch (err: any) {
-      console.log(err);
-    }
-  }, []);
+        const searchParams = createSearchParams(updatedParams);
 
-  useEffect(() => {
-    getBills();
-  }, [getBills]);
+        getBills(searchParams);
+
+        return updatedParams;
+      });
+    },
+    [billSearchParams]
+  );
 
   const styles = StyleSheet.create({
     container: {
       padding: 8,
     },
+    billsContainer: {
+      height: 630,
+    },
     transactionTypeContainer: {
       flexDirection: "row",
       marginBottom: 8,
+      gap: 4,
     },
     buttonTransaction: {
       width: "50%",
@@ -43,18 +51,28 @@ export default function BillListScreen() {
     <View style={styles.container}>
       <View style={styles.transactionTypeContainer}>
         <View style={[styles.buttonTransaction]}>
-          <Button title="Débito" color={theme.green100} />
+          <Button
+            title="Débito"
+            color={theme.red100}
+            onPress={() => handleSearchParamsUpdate("TransactionType", 0)}
+          />
         </View>
         <View style={[styles.buttonTransaction]}>
-          <Button title="Crédito" color={theme.red100} />
+          <Button
+            title="Crédito"
+            color={theme.green100}
+            onPress={() => handleSearchParamsUpdate("TransactionType", 1)}
+          />
         </View>
       </View>
 
-      <FlatList
-        data={bills}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <BillListItem bill={item} />}
-      />
+      <View style={styles.billsContainer}>
+        <FlatList
+          data={bills}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <BillListItem bill={item} />}
+        />
+      </View>
     </View>
   );
 }

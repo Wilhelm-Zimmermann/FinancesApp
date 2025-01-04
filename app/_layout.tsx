@@ -1,4 +1,5 @@
 import { AuthProvider } from "@/contexts/AuthContext/AuthContext";
+import { BillProvider } from "@/contexts/BillsContext/BillContext";
 import { ThemeProvider } from "@/contexts/ThemeContext/ThemeContext";
 import { useFonts } from "expo-font";
 import { Slot } from "expo-router";
@@ -27,8 +28,10 @@ export default function RootLayout() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <Slot />
-        <StatusBar style="dark" />
+        <BillProvider>
+          <Slot />
+          <StatusBar style="dark" />
+        </BillProvider>
       </AuthProvider>
     </ThemeProvider>
   );

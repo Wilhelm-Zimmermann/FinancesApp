@@ -4,6 +4,7 @@ import { format } from "date-fns";
 
 interface BillListItemProps {
   bill: {
+    id: string;
     name: string;
     price: number;
     effectiveDate: string;
@@ -30,7 +31,7 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
     },
     price: {
       fontSize: 24,
-      color: bill.transactionType == "Credit" ? theme.green100 : theme.red100,
+      color: bill.transactionType == "Debit" ? theme.green100 : theme.red100,
     },
   });
 
@@ -40,7 +41,7 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} key={bill.id}>
       <View>
         <Text style={styles.title}>{bill.name}</Text>
         <Text style={[{ marginTop: 8 }]}>
@@ -49,7 +50,7 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
       </View>
       <View>
         <Text style={styles.price}>
-          {bill.transactionType == "Debit" && "- "}
+          {bill.transactionType == "Credit" && "- "}
           {""}
           {BRL.format(bill.price)}
         </Text>
