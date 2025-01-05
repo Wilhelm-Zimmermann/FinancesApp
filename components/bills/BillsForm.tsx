@@ -1,10 +1,21 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Picker } from "../shared/Picker";
 import { useCallback, useState } from "react";
 import { DatePicker } from "../shared/DatePicker";
 import { ICreateBillDto } from "@/models/bills/create-bill.dto";
 import { Ionicons } from "@expo/vector-icons";
 import { useBills } from "@/contexts/BillsContext/BillContext";
+import { Formik, Field } from "formik";
+import { billFormValidationSchema } from "./validations/bill-form.validation";
+import { DatePickerFormik } from "../shared/DatePickerFormik";
+import { PickerFormik } from "../shared/PickerFormik";
 
 export const BillsForm = () => {
   const [billForm, setBillForm] = useState<ICreateBillDto>(
@@ -23,78 +34,131 @@ export const BillsForm = () => {
     []
   );
 
-  const handleCreatebill = useCallback(() => {
-    create(billForm);
-  }, [billForm]);
+  const handleCreatebill = (data: ICreateBillDto) => {
+    console.log(data);
+
+    // create(billForm);
+  };
 
   return (
-    <View style={styles.formContainer}>
-      <TextInput
-        style={styles.inputContainer}
-        placeholder="Nome"
-        onChangeText={(value) => handleUpdateBill("name", value)}
-      />
-      <TextInput
-        style={styles.inputContainer}
-        placeholder="Preço"
-        keyboardType="number-pad"
-        onChangeText={(value) => handleUpdateBill("price", value)}
-      />
-      <TextInput
-        style={[styles.inputContainer, { height: 100 }]}
-        placeholder="Descrição"
-        onChangeText={(value) => handleUpdateBill("description", value)}
-      />
-      <View style={styles.twoColumns}>
-        <Picker<ICreateBillDto>
-          items={[
-            { label: "Débito", value: 1 },
-            { label: "Crédito", value: 0 },
-          ]}
-          title="Tipo de transação"
-          fieldToSet="transactionType"
-          onChange={handleUpdateBill}
-        />
-        <Picker<ICreateBillDto>
-          items={[
-            { label: "Débito", value: "028e9877-cbf1-47c1-9054-4ff1dc6e7769" },
-            { label: "Crédito", value: "b8dd36fa-3293-4f9c-bd32-334ffa52c6b4" },
-          ]}
-          title="Tipo de conta"
-          fieldToSet="billTypeId"
-          onChange={handleUpdateBill}
-        />
-      </View>
-      <View style={styles.twoColumns}>
-        <DatePicker<ICreateBillDto>
-          title="Data de vencimento: "
-          fieldToSet="effectiveDate"
-          onChange={handleUpdateBill}
-        />
-        <DatePicker<ICreateBillDto>
-          title="Data de pagamento: "
-          fieldToSet="paidDate"
-          onChange={handleUpdateBill}
-        />
-      </View>
-      <View style={styles.actionsContainer}>
-        <Pressable
-          style={({ pressed }) => [
-            styles.createButton,
-            pressed && styles.createButtonPressed,
-          ]}
-          onPress={handleCreatebill}
-        >
-          <Text style={{ fontSize: 18 }}>Criar</Text>
-          <Ionicons size={18} name={"add"} />
-        </Pressable>
-      </View>
-    </View>
+    <Formik
+      initialValues={billForm}
+      onSubmit={handleCreatebill}
+      validationSchema={billFormValidationSchema}
+      enableReinitialize
+    >
+      {({ handleChange, handleSubmit, values, errors, setFieldValue }) => (
+        <View style={styles.formContainer}>
+          <TextInput
+            style={styles.inputContainer}
+            placeholder="Nome"
+            onChangeText={handleChange("name")}
+          />
+          {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
+          <TextInput
+            style={styles.inputContainer}
+            placeholder="Preço"
+            keyboardType="number-pad"
+            onChangeText={handleChange("price")}
+          />
+          {errors.price && <Text style={styles.errorText}>{errors.price}</Text>}
+          <TextInput
+            style={[styles.inputContainer, { height: 100 }]}
+            placeholder="Descrição"
+            onChangeText={handleChange("description")}
+          />
+          {errors.description && (
+            <Text style={styles.errorText}>{errors.description}</Text>
+          )}
+          <View style={styles.twoColumns}>
+            <View style={[styles.fieldContainer, { width: "50%" }]}>
+              <Field
+                name="transactionType"
+                title="Tipo de transação"
+                items={[
+                  {
+                    label: "Débito",
+                    value: 0,
+                  },
+                  {
+                    label: "Crédito",
+                    value: 1,
+                  },
+                ]}
+                component={PickerFormik}
+              />
+              {errors.transactionType && (
+                <Text style={styles.errorText}>{errors.transactionType}</Text>
+              )}
+            </View>
+
+            <View style={[styles.fieldContainer, { width: "50%" }]}>
+              <Field
+                name="billTypeId"
+                title="Tipo da conta"
+                items={[
+                  {
+                    label: "Débito",
+                    value: "028e9877-cbf1-47c1-9054-4ff1dc6e7769",
+                  },
+                  {
+                    label: "Crédito",
+                    value: "b8dd36fa-3293-4f9c-bd32-334ffa52c6b4",
+                  },
+                ]}
+                component={PickerFormik}
+              />
+              {errors.billTypeId && (
+                <Text style={styles.errorText}>{errors.billTypeId}</Text>
+              )}
+            </View>
+          </View>
+          <View style={styles.twoColumns}>
+            <View style={[styles.fieldContainer, { width: "50%" }]}>
+              <Field
+                name="effectiveDate"
+                title="Data de vencimento: "
+                component={DatePickerFormik}
+              />
+              {errors.effectiveDate &&
+                typeof errors.effectiveDate === "string" && (
+                  <Text style={styles.errorText}>{errors.effectiveDate}</Text>
+                )}
+            </View>
+            <View style={[styles.fieldContainer, { width: "50%" }]}>
+              <Field
+                name="paiedDate"
+                title="Data de pagamento: "
+                component={DatePickerFormik}
+              />
+              {errors.paidDate && typeof errors.paidDate === "string" && (
+                <Text style={styles.errorText}>{errors.paidDate}</Text>
+              )}
+            </View>
+          </View>
+          <View style={styles.actionsContainer}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.createButton,
+                pressed && styles.createButtonPressed,
+              ]}
+              onPress={() => handleSubmit()}
+            >
+              <Text style={{ fontSize: 18 }}>Criar</Text>
+              <Ionicons size={18} name={"add"} />
+            </Pressable>
+          </View>
+        </View>
+      )}
+    </Formik>
   );
 };
 
 const styles = StyleSheet.create({
   formContainer: {
+    display: "flex",
+  },
+  fieldContainer: {
     display: "flex",
   },
   inputContainer: {
@@ -141,5 +205,8 @@ const styles = StyleSheet.create({
   },
   createButtonPressed: {
     backgroundColor: "#29f04a",
+  },
+  errorText: {
+    color: "red",
   },
 });

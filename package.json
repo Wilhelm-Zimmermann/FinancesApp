@@ -3,8 +3,8 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "dotenv -e .env.dev npx expo start -c --port=9090",
-    "start-mobile": "dotenv -e .env.test npx expo start -c --port=9090",
+    "start": "dotenv -e .env.dev cross-env RCT_METRO_PORT=11111 npx expo start --port 9090 -c",
+    "start-mobile": "dotenv -e .env.test cross-env RCT_METRO_PORT=11111 npx expo start --port 9090 -c",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -39,6 +39,7 @@
     "expo-symbols": "~0.2.0",
     "expo-system-ui": "~4.0.6",
     "expo-web-browser": "~14.0.1",
+    "formik": "^2.4.6",
     "qs": "^6.13.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -50,7 +51,8 @@
     "react-native-safe-area-context": "4.12.0",
     "react-native-screens": "~4.1.0",
     "react-native-web": "~0.19.13",
-    "react-native-webview": "13.12.5"
+    "react-native-webview": "13.12.5",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

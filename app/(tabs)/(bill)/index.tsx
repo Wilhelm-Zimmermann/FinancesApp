@@ -43,7 +43,7 @@ export default function BillListScreen() {
       gap: 4,
     },
     buttonTransaction: {
-      width: "50%",
+      width: "33%",
     },
   });
 
@@ -52,15 +52,35 @@ export default function BillListScreen() {
       <View style={styles.transactionTypeContainer}>
         <View style={[styles.buttonTransaction]}>
           <Button
+            title="Todos"
+            color={
+              billSearchParams.TransactionType == null ||
+              billSearchParams.TransactionType == undefined
+                ? theme.gray600
+                : theme.gray500
+            }
+            onPress={() => handleSearchParamsUpdate("TransactionType", null)}
+          />
+        </View>
+        <View style={[styles.buttonTransaction]}>
+          <Button
             title="Débito"
-            color={theme.red100}
+            color={
+              billSearchParams?.TransactionType == 0
+                ? theme.red800
+                : theme.red400
+            }
             onPress={() => handleSearchParamsUpdate("TransactionType", 0)}
           />
         </View>
         <View style={[styles.buttonTransaction]}>
           <Button
             title="Crédito"
-            color={theme.green100}
+            color={
+              billSearchParams?.TransactionType == 1
+                ? theme.green800
+                : theme.green400
+            }
             onPress={() => handleSearchParamsUpdate("TransactionType", 1)}
           />
         </View>
