@@ -31,7 +31,7 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
     },
     price: {
       fontSize: 24,
-      color: bill.transactionType == "Debit" ? theme.green100 : theme.red100,
+      color: bill.transactionType == "Debit" ? theme.green500 : theme.red500,
     },
   });
 

@@ -24,18 +24,22 @@ export const BillProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [bills, setBills] = useState<BillListDto[]>([]);
-  const create = useCallback(async (data: ICreateBillDto) => {
-    try {
-      const response = (
-        await api.post<GenericApiResponse<BillListDto>>("/bills/create", data)
-      ).data;
-      setBills([...bills, response.data]);
-    } catch (err: any) {
-      console.log(err);
-    } finally {
-      router.back();
-    }
-  }, []);
+  const create = useCallback(
+    async (data: ICreateBillDto) => {
+      try {
+        const response = (
+          await api.post<GenericApiResponse<BillListDto>>("/bills/create", data)
+        ).data;
+
+        setBills([...bills, response.data]);
+      } catch (err: any) {
+        console.log(err);
+      } finally {
+        router.back();
+      }
+    },
+    [bills]
+  );
 
   const getBills = useCallback(
     async (searchParams?: string) => {
