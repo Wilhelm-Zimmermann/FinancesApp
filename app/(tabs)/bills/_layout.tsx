@@ -1,13 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Link, Stack, useRouter } from "expo-router";
-import { useCallback } from "react";
-import { Pressable, TouchableOpacity } from "react-native";
+import { Stack, useRouter } from "expo-router";
+import { TouchableOpacity } from "react-native";
 
 export default function BillLayout() {
   const router = useRouter();
 
   const createNewBill = () => {
-    router.push("/create");
+    router.push("/bills/create");
   };
 
   return (
@@ -24,6 +23,7 @@ export default function BillLayout() {
         }}
       />
       <Stack.Screen name="create" options={{ title: "Adicionar nova conta" }} />
+      <Stack.Screen name="update/[id]" options={{ title: "Atualizar conta" }} />
     </Stack>
   );
 }

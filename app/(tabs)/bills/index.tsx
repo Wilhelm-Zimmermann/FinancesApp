@@ -3,7 +3,7 @@ import { useBills } from "@/contexts/BillsContext/BillContext";
 import { useTheme } from "@/contexts/ThemeContext/ThemeContext";
 import { IBillListSearchParams } from "@/models/bills/bill-list-searcParams";
 import { createSearchParams } from "@/utils/createSearchParams";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, FlatList, StyleSheet, View } from "react-native";
 
 export default function BillListScreen() {
@@ -66,22 +66,22 @@ export default function BillListScreen() {
           <Button
             title="Débito"
             color={
-              billSearchParams?.TransactionType == 0
+              billSearchParams?.TransactionType == 1
                 ? theme.red800
                 : theme.red400
             }
-            onPress={() => handleSearchParamsUpdate("TransactionType", 0)}
+            onPress={() => handleSearchParamsUpdate("TransactionType", 1)}
           />
         </View>
         <View style={[styles.buttonTransaction]}>
           <Button
             title="Crédito"
             color={
-              billSearchParams?.TransactionType == 1
+              billSearchParams?.TransactionType == 0
                 ? theme.green800
                 : theme.green400
             }
-            onPress={() => handleSearchParamsUpdate("TransactionType", 1)}
+            onPress={() => handleSearchParamsUpdate("TransactionType", 0)}
           />
         </View>
       </View>

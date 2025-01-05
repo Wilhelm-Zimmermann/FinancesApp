@@ -1,14 +1,5 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Picker } from "../shared/Picker";
-import { useCallback, useState } from "react";
-import { DatePicker } from "../shared/DatePicker";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { useCallback, useEffect, useState } from "react";
 import { ICreateBillDto } from "@/models/bills/create-bill.dto";
 import { Ionicons } from "@expo/vector-icons";
 import { useBills } from "@/contexts/BillsContext/BillContext";
@@ -16,33 +7,76 @@ import { Formik, Field } from "formik";
 import { billFormValidationSchema } from "./validations/bill-form.validation";
 import { DatePickerFormik } from "../shared/DatePickerFormik";
 import { PickerFormik } from "../shared/PickerFormik";
+import { useBillType } from "@/contexts/BillTypeContext/BillTypeContext";
+import { useLocalSearchParams } from "expo-router";
+import { IUpdateBillDto } from "@/models/bills/update-bill.dto";
 
-export const BillsForm = () => {
+interface IBillsFormProps {
+  actionType?: "create" | "update";
+}
+
+export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
   const [billForm, setBillForm] = useState<ICreateBillDto>(
     {} as ICreateBillDto
   );
-  const { create } = useBills();
+  const { create, update, getBillById } = useBills();
+  const { billTypes } = useBillType();
+  const { id } = useLocalSearchParams<{ id: string }>();
+
+  const fetchCurrentBill = useCallback(async () => {
+    const currentBill = await getBillById(id);
+    setBillForm({
+      id: id,
+      billTypeId: currentBill?.billTypeId ?? "",
+      description: currentBill?.description ?? "",
+      effectiveDate: new Date(currentBill?.effectiveDate ?? new Date()),
+      transactionType: currentBill?.transactionType == "Debit" ? 1 : 0,
+      paidDate: new Date(currentBill?.paidDate ?? new Date()),
+      name: currentBill?.name ?? "",
+      price: currentBill?.price ?? 0,
+    });
+  }, [billForm]);
+
+  useEffect(() => {
+    if (actionType === "update") {
+      fetchCurrentBill();
+    }
+  }, [id]);
 
   const handleCreatebill = (data: ICreateBillDto) => {
     create(data);
   };
 
+  const handleUpdateBill = (data: IUpdateBillDto) => {
+    update(data);
+  };
+
+  const handleSubmitForm = (data: ICreateBillDto) => {
+    if (actionType === "create") {
+      handleCreatebill(data);
+    } else {
+      handleUpdateBill({ ...data, id: id });
+    }
+  };
+
   return (
     <Formik
       initialValues={billForm}
-      onSubmit={handleCreatebill}
+      onSubmit={handleSubmitForm}
       validationSchema={billFormValidationSchema}
       enableReinitialize
     >
       {({ handleChange, handleSubmit, values, errors, setFieldValue }) => (
         <View style={styles.formContainer}>
           <TextInput
+            value={values.name}
             style={styles.inputContainer}
             placeholder="Nome"
             onChangeText={handleChange("name")}
           />
           {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
           <TextInput
+            value={values.price?.toString()}
             style={styles.inputContainer}
             placeholder="Preço"
             keyboardType="number-pad"
@@ -50,6 +84,7 @@ export const BillsForm = () => {
           />
           {errors.price && <Text style={styles.errorText}>{errors.price}</Text>}
           <TextInput
+            value={values.description}
             style={[styles.inputContainer, { height: 100 }]}
             placeholder="Descrição"
             onChangeText={handleChange("description")}
@@ -65,11 +100,11 @@ export const BillsForm = () => {
                 items={[
                   {
                     label: "Débito",
-                    value: 0,
+                    value: 1,
                   },
                   {
                     label: "Crédito",
-                    value: 1,
+                    value: 0,
                   },
                 ]}
                 component={PickerFormik}
@@ -83,16 +118,12 @@ export const BillsForm = () => {
               <Field
                 name="billTypeId"
                 title="Tipo da conta"
-                items={[
-                  {
-                    label: "Débito",
-                    value: "028e9877-cbf1-47c1-9054-4ff1dc6e7769",
-                  },
-                  {
-                    label: "Crédito",
-                    value: "b8dd36fa-3293-4f9c-bd32-334ffa52c6b4",
-                  },
-                ]}
+                items={billTypes.map((billType) => {
+                  return {
+                    label: billType.type,
+                    value: billType.id,
+                  };
+                })}
                 component={PickerFormik}
               />
               {errors.billTypeId && (

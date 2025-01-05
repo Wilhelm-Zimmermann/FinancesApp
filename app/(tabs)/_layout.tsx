@@ -38,7 +38,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="(bill)"
+        name="bills"
         options={{
           title: "Contas",
           tabBarIcon: ({ focused }) => (
@@ -53,7 +53,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="(user)"
+        name="user"
         options={{
           title: "Perfil",
           tabBarIcon: ({ focused }) => (
