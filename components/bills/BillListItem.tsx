@@ -1,6 +1,7 @@
 import { useTheme } from "@/contexts/ThemeContext/ThemeContext";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { format } from "date-fns";
+import { Link, router, useNavigation } from "expo-router";
 
 interface BillListItemProps {
   bill: {
@@ -31,9 +32,13 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
     },
     price: {
       fontSize: 24,
-      color: bill.transactionType == "Debit" ? theme.green500 : theme.red500,
+      color: bill.transactionType == "Credit" ? theme.green500 : theme.red500,
     },
   });
+
+  const goToUpdatePage = () => {
+    router.navigate(`/bills/update/${bill.id}`);
+  };
 
   const BRL = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -41,7 +46,7 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
   });
 
   return (
-    <View style={styles.container} key={bill.id}>
+    <Pressable style={styles.container} key={bill.id} onPress={goToUpdatePage}>
       <View>
         <Text style={styles.title}>{bill.name}</Text>
         <Text style={[{ marginTop: 8 }]}>
@@ -50,11 +55,11 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
       </View>
       <View>
         <Text style={styles.price}>
-          {bill.transactionType == "Credit" && "- "}
+          {bill.transactionType == "Debit" && "- "}
           {""}
           {BRL.format(bill.price)}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
