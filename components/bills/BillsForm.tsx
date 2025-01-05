@@ -23,21 +23,8 @@ export const BillsForm = () => {
   );
   const { create } = useBills();
 
-  const handleUpdateBill = useCallback(
-    (fieldToUpdate: keyof ICreateBillDto, fieldValue: any) => {
-      setBillForm((prev) => ({
-        ...prev,
-        [fieldToUpdate]: fieldValue,
-      }));
-    },
-
-    []
-  );
-
   const handleCreatebill = (data: ICreateBillDto) => {
-    console.log(data);
-
-    // create(billForm);
+    create(data);
   };
 
   return (
