@@ -60,7 +60,7 @@ export const DatePicker = <T,>({
 
 const styles = StyleSheet.create({
   container: {
-    width: "50%",
+    width: "100%",
     display: "flex",
   },
   pressableContainer: {
@@ -72,6 +72,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
     padding: 10,
-    width: 180,
+    // width: 180,
   },
 });

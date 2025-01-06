@@ -22,6 +22,7 @@
     "@react-native-picker/picker": "^2.10.2",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/native": "^7.0.0",
+    "@types/date-fns": "^2.5.3",
     "axios": "^1.7.9",
     "cross-env": "^7.0.3",
     "date-fns": "^4.1.0",
