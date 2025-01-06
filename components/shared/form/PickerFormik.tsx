@@ -54,11 +54,13 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     borderWidth: 1,
+    width: "100%",
     borderColor: "#ddd",
     borderRadius: 5,
     marginTop: 10,
   },
   picker: {
+    width: "100%",
     height: 50,
   },
 });
