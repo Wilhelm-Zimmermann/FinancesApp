@@ -4,7 +4,12 @@ import { useTheme } from "@/contexts/ThemeContext/ThemeContext";
 import { IBillListSearchParams } from "@/models/bills/bill-list-searcParams";
 import { createSearchParams } from "@/utils/createSearchParams";
 import { Picker } from "@react-native-picker/picker";
-import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import {
+  router,
+  useLocalSearchParams,
+  useNavigation,
+  useFocusEffect,
+} from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Button, FlatList, StyleSheet, Text, View } from "react-native";
 import {
@@ -22,8 +27,10 @@ import {
   subYears,
   startOfDay,
   endOfDay,
+  isBefore,
 } from "date-fns";
 import { DatePicker } from "@/components/shared/form/DatePicker";
+import Toast from "react-native-toast-message";
 
 export default function BillListScreen() {
   const defaultTitle = "Contas";
@@ -48,7 +55,6 @@ export default function BillListScreen() {
     router.setParams(currentParams);
 
     const searchParams = createSearchParams(currentParams);
-    console.log(searchParams);
     setBillSearchParams(param);
 
     getBills(searchParams);
@@ -127,14 +133,21 @@ export default function BillListScreen() {
     );
 
     const formattedEndDate = new Date(periodDateFilter.EndDate ?? new Date());
-
+    if (isBefore(formattedEndDate, formattedStartDate)) {
+      Toast.show({
+        type: "error",
+        text1: "Nub",
+        text2: "A data de fim deve ser maior que a data inicial",
+      });
+      return;
+    }
     handleSearchParamsUpdate({
       StartDate: startOfDay(formattedStartDate).toISOString(),
       EndDate: endOfDay(formattedEndDate).toISOString(),
     });
 
     navigation.setOptions({
-      title: "fodaci",
+      title: "Contas",
     });
   };
 
@@ -208,6 +221,24 @@ export default function BillListScreen() {
       key: "period",
     },
   ];
+
+  useFocusEffect(
+    useCallback(() => {
+      const now = new Date();
+      let startDate = startOfMonth(now);
+      let endDate = endOfMonth(now);
+      let formattedTitle = `${defaultTitle} - ${format(startDate, "MMMM")}`;
+
+      handleSearchParamsUpdate({
+        StartDate: startDate.toISOString(),
+        EndDate: endDate.toISOString(),
+      });
+
+      navigation.setOptions({
+        title: formattedTitle,
+      });
+    }, [navigation])
+  );
 
   return (
     <View>
@@ -296,6 +327,7 @@ export default function BillListScreen() {
           />
         </View>
       </View>
+      <Toast />
     </View>
   );
 }
