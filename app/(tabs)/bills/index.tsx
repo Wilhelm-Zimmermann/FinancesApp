@@ -10,14 +10,12 @@ import {
   useNavigation,
   useFocusEffect,
 } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
-import { Button, FlatList, StyleSheet, Text, View } from "react-native";
+import { useCallback, useState } from "react";
+import { Button, FlatList, StyleSheet, View } from "react-native";
 import {
-  getDaysInMonth,
   startOfMonth,
   endOfMonth,
   subMonths,
-  subDays,
   format,
   startOfWeek,
   endOfWeek,
@@ -31,6 +29,7 @@ import {
 } from "date-fns";
 import { DatePicker } from "@/components/shared/form/DatePicker";
 import Toast from "react-native-toast-message";
+import { Toaster } from "@/components/shared/Toaster";
 
 export default function BillListScreen() {
   const defaultTitle = "Contas";
@@ -136,7 +135,7 @@ export default function BillListScreen() {
     if (isBefore(formattedEndDate, formattedStartDate)) {
       Toast.show({
         type: "error",
-        text1: "Nub",
+        text1: "Atenção",
         text2: "A data de fim deve ser maior que a data inicial",
       });
       return;
@@ -150,39 +149,6 @@ export default function BillListScreen() {
       title: "Contas",
     });
   };
-
-  const styles = StyleSheet.create({
-    container: {
-      padding: 8,
-    },
-    billsContainer: {
-      height: 630,
-    },
-    transactionTypeContainer: {
-      flexDirection: "row",
-      marginBottom: 8,
-      gap: 4,
-      marginTop: 10,
-    },
-    buttonTransaction: {
-      width: "33%",
-    },
-    pickerContainer: {
-      borderWidth: 1,
-      borderColor: "#ddd",
-      borderRadius: 5,
-    },
-    periodDatesContainer: {
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "flex-end",
-      justifyContent: "space-between",
-      marginTop: 10,
-    },
-    periodContent: {
-      width: "30%",
-    },
-  });
 
   const pickerItems = [
     {
@@ -327,7 +293,40 @@ export default function BillListScreen() {
           />
         </View>
       </View>
-      <Toast />
+      <Toaster />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 8,
+  },
+  billsContainer: {
+    maxHeight: 630,
+  },
+  transactionTypeContainer: {
+    flexDirection: "row",
+    marginBottom: 8,
+    gap: 4,
+    marginTop: 10,
+  },
+  buttonTransaction: {
+    width: "33%",
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 5,
+  },
+  periodDatesContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  periodContent: {
+    width: "30%",
+  },
+});

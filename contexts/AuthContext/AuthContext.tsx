@@ -1,6 +1,6 @@
 import identityApi from "@/utils/identity-api";
 import { createContext, useContext, useState } from "react";
-import { UserLogin } from "./UserLogin";
+import { UserLogin } from "./IUserLogin";
 import { LoginResponse } from "./LoginResponse";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";

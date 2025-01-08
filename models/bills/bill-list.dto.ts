@@ -1,3 +1,5 @@
+import { IBillTypeListDto } from "../billTypes/billType-list.dto";
+
 export interface BillListDto {
     id: string;
     name: string;
@@ -8,4 +10,5 @@ export interface BillListDto {
     billTypeId: string;
     userId: string;
     transactionType: string;
+    billType?: IBillTypeListDto;
 }

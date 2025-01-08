@@ -10,6 +10,10 @@ interface BillListItemProps {
     price: number;
     effectiveDate: string;
     transactionType: string;
+    billType?: {
+      id: string;
+      type: string;
+    };
   };
 }
 
@@ -27,8 +31,13 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
       marginBottom: 8,
       borderRadius: 4,
     },
+    leftSideContent: {
+      display: "flex",
+      justifyContent: "space-between",
+    },
     title: {
       fontSize: 18,
+      fontWeight: "600",
     },
     price: {
       fontSize: 24,
@@ -47,8 +56,9 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
 
   return (
     <Pressable style={styles.container} key={bill.id} onPress={goToUpdatePage}>
-      <View>
+      <View style={styles.leftSideContent}>
         <Text style={styles.title}>{bill.name}</Text>
+        <Text>{bill?.billType?.type}</Text>
         <Text style={[{ marginTop: 8 }]}>
           {format(new Date(bill.effectiveDate), "dd/MM/yyyy")}
         </Text>
