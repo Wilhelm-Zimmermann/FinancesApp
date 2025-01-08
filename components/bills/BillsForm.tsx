@@ -19,7 +19,7 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
   const [billForm, setBillForm] = useState<ICreateBillDto>(
     {} as ICreateBillDto
   );
-  const { create, update, getBillById } = useBills();
+  const { create, update, getBillById, deleteBill } = useBills();
   const { billTypes } = useBillType();
   const { id } = useLocalSearchParams<{ id: string }>();
 
@@ -42,6 +42,10 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
       fetchCurrentBill();
     }
   }, [id]);
+
+  const handleDeleteBill = () => {
+    if (billForm.id) deleteBill(billForm.id);
+  };
 
   const handleCreatebill = (data: ICreateBillDto) => {
     create(data);
@@ -155,6 +159,17 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
             </View>
           </View>
           <View style={styles.actionsContainer}>
+            {actionType === "update" && (
+              <Pressable
+                style={({ pressed }) => [
+                  styles.deleteButton,
+                  pressed && styles.deleteButtonPressed,
+                ]}
+                onPress={() => handleDeleteBill()}
+              >
+                <Text style={{ fontSize: 18, color: "white" }}>Deletar</Text>
+              </Pressable>
+            )}
             <Pressable
               style={({ pressed }) => [
                 styles.createButton,
@@ -162,8 +177,9 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
               ]}
               onPress={() => handleSubmit()}
             >
-              <Text style={{ fontSize: 18 }}>Criar</Text>
-              <Ionicons size={18} name={"add"} />
+              <Text style={{ fontSize: 18, color: "white" }}>
+                {actionType === "update" ? "Atualizar" : "Criar"}
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -206,20 +222,37 @@ const styles = StyleSheet.create({
   picker: {
     height: 50,
   },
-  actionsContainer: {},
+  actionsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    gap: 4,
+  },
   createButton: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
+    textAlign: "center",
     alignItems: "center",
-    width: 82,
+    width: 100,
     padding: 10,
     marginTop: 10,
-    borderWidth: 1,
-    borderColor: "#29f04a",
+    backgroundColor: "#1c7430",
     borderRadius: 5,
-    transitionDuration: "100ms",
-    alignSelf: "flex-end",
+  },
+  deleteButton: {
+    display: "flex",
+    flexDirection: "row",
+    textAlign: "center",
+    alignItems: "center",
+    width: 100,
+    padding: 10,
+    marginTop: 10,
+    backgroundColor: "#c9302c",
+    borderRadius: 5,
+  },
+  deleteButtonPressed: {
+    backgroundColor: "#a32421",
   },
   createButtonPressed: {
     backgroundColor: "#29f04a",

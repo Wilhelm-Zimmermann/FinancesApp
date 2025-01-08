@@ -17,6 +17,7 @@ interface IBillContextProps {
   bills: BillListDto[];
   create: (data: ICreateBillDto) => void;
   update: (data: IUpdateBillDto) => void;
+  deleteBill: (id: string) => void;
   getBills: (searchParams?: string) => void;
   getBillById: (id: string) => Promise<BillListDto | undefined>;
 }
@@ -68,6 +69,21 @@ export const BillProvider: React.FC<{ children: React.ReactNode }> = ({
     [bills]
   );
 
+  const deleteBill = useCallback(
+    async (id: string) => {
+      try {
+        await api.delete("/bills/delete/" + id);
+
+        setBills(bills.filter((x) => x.id !== id));
+      } catch (err: any) {
+        console.log(err);
+      } finally {
+        router.back();
+      }
+    },
+    [bills]
+  );
+
   const getBills = useCallback(
     async (searchParams?: string) => {
       try {
@@ -101,7 +117,7 @@ export const BillProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <BillContext.Provider
-      value={{ create, update, bills, getBills, getBillById }}
+      value={{ create, update, bills, getBills, getBillById, deleteBill }}
     >
       {children}
     </BillContext.Provider>
