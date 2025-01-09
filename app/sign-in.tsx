@@ -1,22 +1,34 @@
 import { loginFormValidationSchema } from "@/components/login/valiations/login.validation";
+import { Toaster } from "@/components/shared/Toaster";
 import { useAuth } from "@/contexts/AuthContext/AuthContext";
 import { IUserLogin } from "@/contexts/AuthContext/IUserLogin";
 import { Formik } from "formik";
 import { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 export default function SignInPage() {
   const { login } = useAuth();
   const [userForm, setUserForm] = useState<IUserLogin>({} as IUserLogin);
 
   const handleSubmitForm = (data: IUserLogin) => {
-    console.log("Logged");
-    login({ password: "1234", username: "teste" });
+    try {
+      login(data);
+    } catch (err: any) {
+      Toast.show({
+        type: "error",
+        text1: "Atenção",
+        text2: "Usuário/Senha inválido",
+      });
+    }
   };
 
   return (
-    <SafeAreaView>
+    <View style={styles.loginForm}>
+      <View>
+        <Text>Faça o seu login</Text>
+      </View>
       <Formik
         initialValues={userForm}
         onSubmit={handleSubmitForm}
@@ -36,7 +48,7 @@ export default function SignInPage() {
             )}
 
             <TextInput
-              value={values.username}
+              value={values.password}
               style={styles.inputContainer}
               placeholder="Senha"
               onChangeText={handleChange("password")}
@@ -50,12 +62,16 @@ export default function SignInPage() {
           </View>
         )}
       </Formik>
-    </SafeAreaView>
+      <Toaster />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   formContainer: {
+    width: "100%",
+    display: "flex",
+    gap: 10,
     padding: 20,
   },
   inputContainer: {
@@ -72,5 +88,11 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
+  },
+  loginForm: {
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
