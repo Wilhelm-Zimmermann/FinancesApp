@@ -1,13 +1,14 @@
 import identityApi from "@/utils/identity-api";
 import { createContext, useContext, useState } from "react";
-import { UserLogin } from "./IUserLogin";
+import { IUserLogin } from "./IUserLogin";
 import { LoginResponse } from "./LoginResponse";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import Toast from "react-native-toast-message";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
-  login: (userLogin: UserLogin) => void;
+  login: (userLogin: IUserLogin) => void;
   logout: () => void;
 }
 
@@ -18,12 +19,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  const login = async (userLogin: UserLogin) => {
+  const login = async (userLogin: IUserLogin) => {
     try {
       const userLoginBody = new URLSearchParams();
       userLoginBody.append("grant_type", "password");
-      userLoginBody.append("username", "will");
-      userLoginBody.append("password", "Will123$");
+      userLoginBody.append("username", userLogin.username);
+      userLoginBody.append("password", userLogin.password);
       userLoginBody.append("client_id", "postman");
       userLoginBody.append(
         "client_secret",
@@ -47,6 +48,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setIsAuthenticated(true);
     } catch (err: any) {
       console.error(err);
+      Toast.show({
+        type: "error",
+        text1: "Atenção",
+        text2: "Usuário/Senha inválido",
+      });
     }
   };
 
