@@ -10,6 +10,7 @@ import { PickerFormik } from "../shared/form/PickerFormik";
 import { useBillType } from "@/contexts/BillTypeContext/BillTypeContext";
 import { useLocalSearchParams } from "expo-router";
 import { IUpdateBillDto } from "@/models/bills/update-bill.dto";
+import { defaultColors } from "@/contexts/ThemeContext/defaultColors";
 
 interface IBillsFormProps {
   actionType?: "create" | "update";
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: defaultColors.gray300,
     borderRadius: 5,
   },
   twoColumns: {
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: defaultColors.gray300,
     borderRadius: 5,
   },
   picker: {
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
     width: 100,
     padding: 10,
     marginTop: 10,
-    backgroundColor: "#1c7430",
+    backgroundColor: defaultColors.green500,
     borderRadius: 5,
   },
   deleteButton: {
@@ -248,14 +249,14 @@ const styles = StyleSheet.create({
     width: 100,
     padding: 10,
     marginTop: 10,
-    backgroundColor: "#c9302c",
+    backgroundColor: defaultColors.red500,
     borderRadius: 5,
   },
   deleteButtonPressed: {
-    backgroundColor: "#a32421",
+    backgroundColor: defaultColors.red700,
   },
   createButtonPressed: {
-    backgroundColor: "#29f04a",
+    backgroundColor: defaultColors.green700,
   },
   errorText: {
     color: "red",

@@ -1,5 +1,5 @@
 import identityApi from "@/utils/identity-api";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { IUserLogin } from "./IUserLogin";
 import { LoginResponse } from "./LoginResponse";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,6 +8,7 @@ import Toast from "react-native-toast-message";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
+  username: string;
   login: (userLogin: IUserLogin) => void;
   logout: () => void;
 }
@@ -18,6 +19,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>("");
 
   const login = async (userLogin: IUserLogin) => {
     try {
@@ -45,6 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       AsyncStorage.setItem("user_token", access_token);
       router.replace("/(tabs)");
 
+      setUsername(userLogin.username);
       setIsAuthenticated(true);
     } catch (err: any) {
       console.error(err);
@@ -63,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={{ login, logout, isAuthenticated, username }}>
       {children}
     </AuthContext.Provider>
   );

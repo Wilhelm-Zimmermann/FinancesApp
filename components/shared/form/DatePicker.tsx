@@ -4,6 +4,7 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { useCallback, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { defaultColors } from "@/contexts/ThemeContext/defaultColors";
 
 interface IDatePickerProps<T> {
   title: string;
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: defaultColors.gray300,
     borderRadius: 5,
     marginTop: 10,
     padding: 10,

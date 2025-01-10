@@ -30,6 +30,7 @@ import {
 import { DatePicker } from "@/components/shared/form/DatePicker";
 import Toast from "react-native-toast-message";
 import { Toaster } from "@/components/shared/Toaster";
+import { defaultColors } from "@/contexts/ThemeContext/defaultColors";
 
 export default function BillListScreen() {
   const defaultTitle = "Contas";
@@ -253,8 +254,8 @@ export default function BillListScreen() {
               color={
                 billSearchParams.TransactionType == null ||
                 billSearchParams.TransactionType == undefined
-                  ? theme.gray800
-                  : theme.gray500
+                  ? defaultColors.gray900
+                  : defaultColors.gray500
               }
               onPress={() =>
                 handleSearchParamsUpdate({ TransactionType: undefined })
@@ -266,8 +267,8 @@ export default function BillListScreen() {
               title="Débito"
               color={
                 billSearchParams.TransactionType === 1
-                  ? theme.red800
-                  : theme.red400
+                  ? defaultColors.red800
+                  : defaultColors.red400
               }
               onPress={() => handleSearchParamsUpdate({ TransactionType: 1 })}
             />
@@ -277,8 +278,8 @@ export default function BillListScreen() {
               title="Crédito"
               color={
                 billSearchParams.TransactionType === 0
-                  ? theme.green800
-                  : theme.green400
+                  ? defaultColors.green800
+                  : defaultColors.green400
               }
               onPress={() => handleSearchParamsUpdate({ TransactionType: 0 })}
             />
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: defaultColors.gray300,
     borderRadius: 5,
   },
   periodDatesContainer: {
