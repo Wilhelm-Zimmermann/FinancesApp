@@ -2,6 +2,7 @@ import { useTheme } from "@/contexts/ThemeContext/ThemeContext";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { format } from "date-fns";
 import { Link, router, useNavigation } from "expo-router";
+import { defaultColors } from "@/contexts/ThemeContext/defaultColors";
 
 interface BillListItemProps {
   bill: {
@@ -41,7 +42,10 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
     },
     price: {
       fontSize: 24,
-      color: bill.transactionType == "Credit" ? theme.green500 : theme.red500,
+      color:
+        bill.transactionType == "Credit"
+          ? defaultColors.green600
+          : defaultColors.red600,
     },
   });
 

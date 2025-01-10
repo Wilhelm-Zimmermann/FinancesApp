@@ -2,6 +2,7 @@ import { loginFormValidationSchema } from "@/components/login/valiations/login.v
 import { Toaster } from "@/components/shared/Toaster";
 import { useAuth } from "@/contexts/AuthContext/AuthContext";
 import { IUserLogin } from "@/contexts/AuthContext/IUserLogin";
+import { defaultColors } from "@/contexts/ThemeContext/defaultColors";
 import { Formik } from "formik";
 import { useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: defaultColors.gray300,
     borderRadius: 5,
   },
   loginButton: {

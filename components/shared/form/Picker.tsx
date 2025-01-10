@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Picker as ReactPicker } from "@react-native-picker/picker";
+import { defaultColors } from "@/contexts/ThemeContext/defaultColors";
 
 interface IItem {
   label: string;
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: defaultColors.gray300,
     borderRadius: 5,
   },
   twoColumns: {
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: defaultColors.gray300,
     borderRadius: 5,
     marginTop: 10,
   },
