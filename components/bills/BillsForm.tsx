@@ -8,7 +8,7 @@ import { billFormValidationSchema } from "./validations/bill-form.validation";
 import { DatePickerFormik } from "../shared/form/DatePickerFormik";
 import { PickerFormik } from "../shared/form/PickerFormik";
 import { useBillType } from "@/contexts/BillTypeContext/BillTypeContext";
-import { useLocalSearchParams } from "expo-router";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { IUpdateBillDto } from "@/models/bills/update-bill.dto";
 import { defaultColors } from "@/contexts/ThemeContext/defaultColors";
 
@@ -21,7 +21,7 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
     {} as ICreateBillDto
   );
   const { create, update, getBillById, deleteBill } = useBills();
-  const { billTypes } = useBillType();
+  const { billTypes, getBillTypes } = useBillType();
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const fetchCurrentBill = useCallback(async () => {
@@ -63,6 +63,12 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
       handleUpdateBill({ ...data, id: id });
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      getBillTypes();
+    }, [])
+  );
 
   return (
     <Formik

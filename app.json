@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.biils.FinancesApp"
     },
     "web": {
       "bundler": "metro",
@@ -36,6 +37,17 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "EXPO_PUBLIC_TOKEN_SECRET": "Segredo",
+      "EXPO_PUBLIC_FINANCES_API": "http://192.168.18.10:6001/api/v1",
+      "EXPO_PUBLIC_IDENTITY_API": "http://192.168.18.10:5000",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "192af830-962c-4103-9995-056cab168151"
+      }
     }
   }
 }

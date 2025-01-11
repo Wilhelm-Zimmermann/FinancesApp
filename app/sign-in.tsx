@@ -4,9 +4,8 @@ import { useAuth } from "@/contexts/AuthContext/AuthContext";
 import { IUserLogin } from "@/contexts/AuthContext/IUserLogin";
 import { defaultColors } from "@/contexts/ThemeContext/defaultColors";
 import { Formik } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 
 export default function SignInPage() {
@@ -25,6 +24,10 @@ export default function SignInPage() {
     }
   };
 
+  login({
+    username: "will",
+    password: "Will123$",
+  });
   return (
     <View style={styles.loginForm}>
       <View>
