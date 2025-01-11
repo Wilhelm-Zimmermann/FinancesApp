@@ -19,7 +19,7 @@ interface BillListItemProps {
 }
 
 export const BillListItem = ({ bill }: BillListItemProps) => {
-  const { theme } = useTheme();
+  const { colorsTheme } = useTheme();
 
   const styles = StyleSheet.create({
     container: {
@@ -27,7 +27,7 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
       justifyContent: "space-between",
       paddingVertical: 12,
       paddingHorizontal: 8,
-      backgroundColor: theme.background,
+      backgroundColor: colorsTheme.background,
       elevation: 1,
       marginBottom: 8,
       borderRadius: 4,

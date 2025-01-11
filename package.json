@@ -6,8 +6,9 @@
     "start": "dotenv -e .env.dev cross-env RCT_METRO_PORT=11111 npx expo start --port 9090 -c",
     "start-mobile": "dotenv -e .env.test cross-env RCT_METRO_PORT=11111 npx expo start --port 9090 -c",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "build-apk-test": "eas build --profile previewTest -p android --local",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint"

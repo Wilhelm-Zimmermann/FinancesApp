@@ -3,7 +3,8 @@ import { ThemeColorStyle } from "./themeColorStyle";
 import { Themes } from "./themes";
 
 interface ThemeContextProps {
-  theme: ThemeColorStyle;
+  colorsTheme: ThemeColorStyle;
+  currentTheme: string;
   setLightTheme: () => void;
   setDarkTheme: () => void;
 }
@@ -29,14 +30,19 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       cardBackground: "#fff",
     },
     dark: {
-      background: "#000",
-      cardBackground: "#1a1a1a",
+      background: "#1a1a1a",
+      cardBackground: "#3d3d3d",
     },
   };
 
   return (
     <ThemeContext.Provider
-      value={{ setLightTheme, setDarkTheme, theme: themes[appTheme] }}
+      value={{
+        setLightTheme,
+        setDarkTheme,
+        colorsTheme: themes[appTheme],
+        currentTheme: appTheme,
+      }}
     >
       {children}
     </ThemeContext.Provider>

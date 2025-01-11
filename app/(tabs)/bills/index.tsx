@@ -34,7 +34,6 @@ import { defaultColors } from "@/contexts/ThemeContext/defaultColors";
 
 export default function BillListScreen() {
   const defaultTitle = "Contas";
-  const { theme } = useTheme();
   const { bills, getBills } = useBills();
   const navigation = useNavigation();
   const routeParams = useLocalSearchParams<{}>();
