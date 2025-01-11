@@ -1,4 +1,12 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import { ICreateBillDto } from "@/models/bills/create-bill.dto";
 import { useBills } from "@/contexts/BillsContext/BillContext";
@@ -70,127 +78,141 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
   );
 
   return (
-    <Formik
-      initialValues={billForm}
-      onSubmit={handleSubmitForm}
-      validationSchema={billFormValidationSchema}
-      enableReinitialize
-    >
-      {({ handleChange, handleSubmit, values, errors, setFieldValue }) => (
-        <View style={styles.formContainer}>
-          <TextInput
-            value={values.name}
-            style={styles.inputContainer}
-            placeholder="Nome"
-            onChangeText={handleChange("name")}
-          />
-          {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
-          <TextInput
-            value={values.price?.toString()}
-            style={styles.inputContainer}
-            placeholder="Preço"
-            keyboardType="number-pad"
-            onChangeText={handleChange("price")}
-          />
-          {errors.price && <Text style={styles.errorText}>{errors.price}</Text>}
-          <TextInput
-            value={values.description}
-            style={[styles.inputContainer, { height: 100 }]}
-            placeholder="Descrição"
-            onChangeText={handleChange("description")}
-          />
-          {errors.description && (
-            <Text style={styles.errorText}>{errors.description}</Text>
-          )}
-          <View style={styles.twoColumns}>
-            <View style={[styles.fieldContainer, { width: "50%" }]}>
-              <Field
-                name="transactionType"
-                title="Tipo de transação"
-                items={[
-                  {
-                    label: "Débito",
-                    value: 1,
-                  },
-                  {
-                    label: "Crédito",
-                    value: 0,
-                  },
-                ]}
-                component={PickerFormik}
+    <KeyboardAvoidingView>
+      <ScrollView>
+        <Formik
+          initialValues={billForm}
+          onSubmit={handleSubmitForm}
+          validationSchema={billFormValidationSchema}
+          enableReinitialize
+        >
+          {({ handleChange, handleSubmit, values, errors, setFieldValue }) => (
+            <View style={styles.formContainer}>
+              <TextInput
+                value={values.name}
+                style={styles.inputContainer}
+                placeholder="Nome"
+                onChangeText={handleChange("name")}
               />
-              {errors.transactionType && (
-                <Text style={styles.errorText}>{errors.transactionType}</Text>
+              {errors.name && (
+                <Text style={styles.errorText}>{errors.name}</Text>
               )}
-            </View>
+              <TextInput
+                value={values.price?.toString()}
+                style={styles.inputContainer}
+                placeholder="Valor"
+                keyboardType="number-pad"
+                onChangeText={handleChange("price")}
+              />
+              {errors.price && (
+                <Text style={styles.errorText}>{errors.price}</Text>
+              )}
+              <TextInput
+                value={values.description}
+                style={[styles.inputContainer, { height: 100 }]}
+                placeholder="Descrição"
+                onChangeText={handleChange("description")}
+              />
+              {errors.description && (
+                <Text style={styles.errorText}>{errors.description}</Text>
+              )}
+              <View style={styles.twoColumns}>
+                <View style={[styles.fieldContainer, { width: "50%" }]}>
+                  <Field
+                    name="transactionType"
+                    title="Tipo de transação"
+                    items={[
+                      {
+                        label: "Débito",
+                        value: 1,
+                      },
+                      {
+                        label: "Crédito",
+                        value: 0,
+                      },
+                    ]}
+                    component={PickerFormik}
+                  />
+                  {errors.transactionType && (
+                    <Text style={styles.errorText}>
+                      {errors.transactionType}
+                    </Text>
+                  )}
+                </View>
 
-            <View style={[styles.fieldContainer, { width: "50%" }]}>
-              <Field
-                name="billTypeId"
-                title="Tipo da conta"
-                items={billTypes.map((billType) => {
-                  return {
-                    label: billType.type,
-                    value: billType.id,
-                  };
-                })}
-                component={PickerFormik}
-              />
-              {errors.billTypeId && (
-                <Text style={styles.errorText}>{errors.billTypeId}</Text>
-              )}
-            </View>
-          </View>
-          <View style={styles.twoColumns}>
-            <View style={[styles.fieldContainer, { width: "50%" }]}>
-              <Field
-                name="effectiveDate"
-                title="Data de vencimento: "
-                component={DatePickerFormik}
-              />
-              {errors.effectiveDate &&
-                typeof errors.effectiveDate === "string" && (
-                  <Text style={styles.errorText}>{errors.effectiveDate}</Text>
+                <View style={[styles.fieldContainer, { width: "50%" }]}>
+                  <Field
+                    name="billTypeId"
+                    title="Tipo da conta"
+                    items={billTypes.map((billType) => {
+                      return {
+                        label: billType.type,
+                        value: billType.id,
+                      };
+                    })}
+                    component={PickerFormik}
+                  />
+                  {errors.billTypeId && (
+                    <Text style={styles.errorText}>{errors.billTypeId}</Text>
+                  )}
+                </View>
+              </View>
+              <View style={styles.twoColumns}>
+                <View style={[styles.fieldContainer, { width: "50%" }]}>
+                  <Field
+                    name="effectiveDate"
+                    title="Data de vencimento: "
+                    component={DatePickerFormik}
+                  />
+                  {errors.effectiveDate &&
+                    typeof errors.effectiveDate === "string" && (
+                      <Text style={styles.errorText}>
+                        {errors.effectiveDate}
+                      </Text>
+                    )}
+                </View>
+                <View style={[styles.fieldContainer, { width: "50%" }]}>
+                  <Field
+                    name="paiedDate"
+                    title="Data de pagamento: "
+                    component={DatePickerFormik}
+                  />
+                  {errors.paidDate && typeof errors.paidDate === "string" && (
+                    <Text style={styles.errorText}>{errors.paidDate}</Text>
+                  )}
+                </View>
+              </View>
+              <View style={styles.actionsContainer}>
+                {actionType === "update" && (
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.deleteButton,
+                      pressed && styles.deleteButtonPressed,
+                    ]}
+                    onPress={() => handleDeleteBill()}
+                  >
+                    <Text style={{ fontSize: 18, color: "white" }}>
+                      Deletar
+                    </Text>
+                  </Pressable>
                 )}
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.createButton,
+                    pressed && styles.createButtonPressed,
+                  ]}
+                  onPress={() => handleSubmit()}
+                >
+                  <Text style={{ fontSize: 18, color: "white" }}>
+                    {actionType === "update" ? "Atualizar" : "Criar"}
+                  </Text>
+                </Pressable>
+              </View>
             </View>
-            <View style={[styles.fieldContainer, { width: "50%" }]}>
-              <Field
-                name="paiedDate"
-                title="Data de pagamento: "
-                component={DatePickerFormik}
-              />
-              {errors.paidDate && typeof errors.paidDate === "string" && (
-                <Text style={styles.errorText}>{errors.paidDate}</Text>
-              )}
-            </View>
-          </View>
-          <View style={styles.actionsContainer}>
-            {actionType === "update" && (
-              <Pressable
-                style={({ pressed }) => [
-                  styles.deleteButton,
-                  pressed && styles.deleteButtonPressed,
-                ]}
-                onPress={() => handleDeleteBill()}
-              >
-                <Text style={{ fontSize: 18, color: "white" }}>Deletar</Text>
-              </Pressable>
-            )}
-            <Pressable
-              style={({ pressed }) => [
-                styles.createButton,
-                pressed && styles.createButtonPressed,
-              ]}
-              onPress={() => handleSubmit()}
-            >
-              <Text style={{ fontSize: 18, color: "white" }}>
-                {actionType === "update" ? "Atualizar" : "Criar"}
-              </Text>
-            </Pressable>
-          </View>
-        </View>
-      )}
-    </Formik>
+          )}
+        </Formik>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

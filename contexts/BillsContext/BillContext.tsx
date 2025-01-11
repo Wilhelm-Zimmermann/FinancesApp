@@ -148,7 +148,7 @@ export const BillProvider: React.FC<{ children: React.ReactNode }> = ({
         )
       ).data?.data;
 
-      setDebitSum(billsCreditSum);
+      setCreditSum(billsCreditSum);
     } catch (err: any) {
       console.log(err);
     }
