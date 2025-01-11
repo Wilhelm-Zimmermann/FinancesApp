@@ -35,11 +35,13 @@
     "expo-font": "~13.0.1",
     "expo-haptics": "~14.0.0",
     "expo-linking": "~7.0.3",
+    "expo-local-authentication": "^15.0.2",
     "expo-router": "~4.0.13",
     "expo-splash-screen": "~0.29.18",
     "expo-status-bar": "~2.0.0",
     "expo-symbols": "~0.2.0",
     "expo-system-ui": "~4.0.6",
+    "expo-updates": "~0.26.12",
     "expo-web-browser": "~14.0.1",
     "formik": "^2.4.6",
     "qs": "^6.13.1",
@@ -55,8 +57,7 @@
     "react-native-toast-message": "^2.2.1",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
-    "yup": "^1.6.1",
-    "expo-updates": "~0.26.12"
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

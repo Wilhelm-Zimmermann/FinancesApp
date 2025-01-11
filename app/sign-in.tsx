@@ -3,27 +3,46 @@ import { Toaster } from "@/components/shared/Toaster";
 import { useAuth } from "@/contexts/AuthContext/AuthContext";
 import { IUserLogin } from "@/contexts/AuthContext/IUserLogin";
 import { defaultColors } from "@/contexts/ThemeContext/defaultColors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import Toast from "react-native-toast-message";
+import * as LocalAuthentication from "expo-local-authentication";
+import { router } from "expo-router";
 
 export default function SignInPage() {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const [userForm, setUserForm] = useState<IUserLogin>({} as IUserLogin);
 
-  const handleSubmitForm = (data: IUserLogin) => {
+  const handleSubmitForm = async (data: IUserLogin) => {
     try {
       login(data);
     } catch (err: any) {
       console.log(err);
     }
   };
+  const verifyBiometrics = useCallback(async () => {
+    const username = await AsyncStorage.getItem("username");
+    if (username) {
+      const bioAuth = await LocalAuthentication.authenticateAsync({
+        promptMessage: "Authenticate to continue",
+        disableDeviceFallback: true,
+      });
 
-  // login({
-  //   username: "will",
-  //   password: "Will123$",
-  // });
+      if (bioAuth.success) {
+        const password = await AsyncStorage.getItem("password");
+        login({
+          username: username,
+          password: password ?? "",
+        });
+      }
+    }
+  }, [isAuthenticated, router]);
+
+  useEffect(() => {
+    verifyBiometrics();
+  }, []);
+
   return (
     <View style={styles.loginForm}>
       <View>

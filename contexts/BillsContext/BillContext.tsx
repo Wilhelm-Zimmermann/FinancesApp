@@ -1,4 +1,3 @@
-import { IBillListSearchParams } from "@/models/bills/bill-list-searcParams";
 import { BillListDto } from "@/models/bills/bill-list.dto";
 import { ICreateBillDto } from "@/models/bills/create-bill.dto";
 import { IUpdateBillDto } from "@/models/bills/update-bill.dto";

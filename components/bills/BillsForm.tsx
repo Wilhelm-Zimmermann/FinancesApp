@@ -1,7 +1,6 @@
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import { ICreateBillDto } from "@/models/bills/create-bill.dto";
-import { Ionicons } from "@expo/vector-icons";
 import { useBills } from "@/contexts/BillsContext/BillContext";
 import { Formik, Field } from "formik";
 import { billFormValidationSchema } from "./validations/bill-form.validation";
