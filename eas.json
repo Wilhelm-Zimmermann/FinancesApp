@@ -8,8 +8,12 @@
       "developmentClient": true,
       "distribution": "internal"
     },
-    "previewTest": {
+    "preview": {
       "distribution": "internal",
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
+      },
       "env": {
         "EXPO_PUBLIC_TOKEN_SECRET": "Segredo",
         "EXPO_PUBLIC_FINANCES_API": "http://192.168.18.10:6001/api/v1",

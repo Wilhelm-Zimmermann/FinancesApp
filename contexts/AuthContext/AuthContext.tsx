@@ -42,8 +42,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         })
       ).data;
 
-      console.log(access_token);
-
       AsyncStorage.setItem("user_token", access_token);
       router.replace("/(tabs)");
 
@@ -54,7 +52,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       Toast.show({
         type: "error",
         text1: "Atenção",
-        text2: "Usuário/Senha inválido",
+        text2: process.env.EXPO_PUBLIC_IDENTITY_API,
       });
     }
   };

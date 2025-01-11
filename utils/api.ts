@@ -14,11 +14,8 @@ api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     try {
       const token = await AsyncStorage.getItem("user_token");
-      console.log("Isso é um token seu merda: " + token);
 
       if (token) {
-        console.log("Enviando o token no header de autorização");
-
         config.headers.Authorization = `Bearer ${token}`;
       }
     } catch (err: any) {
