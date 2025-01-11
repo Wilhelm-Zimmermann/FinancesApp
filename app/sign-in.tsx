@@ -16,18 +16,14 @@ export default function SignInPage() {
     try {
       login(data);
     } catch (err: any) {
-      Toast.show({
-        type: "error",
-        text1: "Atenção",
-        text2: "Usuário/Senha inválido",
-      });
+      console.log(err);
     }
   };
 
-  login({
-    username: "will",
-    password: "Will123$",
-  });
+  // login({
+  //   username: "will",
+  //   password: "Will123$",
+  // });
   return (
     <View style={styles.loginForm}>
       <View>

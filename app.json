@@ -9,14 +9,18 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.biils.FinancesApp"
+      "package": "com.biils.FinancesApp",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "bundler": "metro",
@@ -48,6 +52,9 @@
       "eas": {
         "projectId": "192af830-962c-4103-9995-056cab168151"
       }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/192af830-962c-4103-9995-056cab168151"
     }
   }
 }
