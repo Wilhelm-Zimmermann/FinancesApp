@@ -206,6 +206,39 @@ export default function BillListScreen() {
     }, [navigation])
   );
 
+  const styles = StyleSheet.create({
+    container: {
+      padding: 8,
+    },
+    billsContainer: {
+      maxHeight: selectedDateFilter === "period" ? "80%" : "83%",
+    },
+    transactionTypeContainer: {
+      flexDirection: "row",
+      marginBottom: 8,
+      gap: 4,
+      marginTop: 10,
+    },
+    buttonTransaction: {
+      width: "33%",
+    },
+    pickerContainer: {
+      borderWidth: 1,
+      borderColor: defaultColors.gray300,
+      borderRadius: 5,
+    },
+    periodDatesContainer: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "flex-end",
+      justifyContent: "space-between",
+      marginTop: 10,
+    },
+    periodContent: {
+      width: "30%",
+    },
+  });
+
   return (
     <View>
       <View style={styles.container}>
@@ -297,36 +330,3 @@ export default function BillListScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 8,
-  },
-  billsContainer: {
-    maxHeight: 630,
-  },
-  transactionTypeContainer: {
-    flexDirection: "row",
-    marginBottom: 8,
-    gap: 4,
-    marginTop: 10,
-  },
-  buttonTransaction: {
-    width: "33%",
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: defaultColors.gray300,
-    borderRadius: 5,
-  },
-  periodDatesContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-end",
-    justifyContent: "space-between",
-    marginTop: 10,
-  },
-  periodContent: {
-    width: "30%",
-  },
-});

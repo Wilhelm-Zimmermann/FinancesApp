@@ -5,7 +5,7 @@ export const billFormValidationSchema = Yup.object().shape({
   price: Yup.number()
     .required("Preço é obrigatório")
     .positive("Deve ser positivo"),
-  description: Yup.string().optional(),
+  description: Yup.string().optional().nullable(),
   transactionType: Yup.number().required("Tipo de transação é obrigatório"),
   billTypeId: Yup.string().required("Tipo de conta é obrigatório"),
   effectiveDate: Yup.date().required("Data de vencimento é obrigatória"),

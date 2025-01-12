@@ -43,6 +43,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       ).data;
 
       AsyncStorage.setItem("user_token", access_token);
+      AsyncStorage.setItem("username", userLogin.username);
+      AsyncStorage.setItem("password", userLogin.password);
       router.replace("/(tabs)");
 
       setUsername(userLogin.username);

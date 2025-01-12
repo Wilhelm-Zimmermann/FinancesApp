@@ -4,6 +4,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
+import { router } from "expo-router";
 
 const api = axios.create({
   baseURL: process.env.EXPO_PUBLIC_FINANCES_API,
@@ -36,6 +37,7 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response && error.response.status == 401) {
       console.error("The user is unauthorized");
+      router.replace("/sign-in");
       AsyncStorage.removeItem("user_token");
     }
 

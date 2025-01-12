@@ -1,4 +1,3 @@
-import { IBillListSearchParams } from "@/models/bills/bill-list-searcParams";
 import { BillListDto } from "@/models/bills/bill-list.dto";
 import { ICreateBillDto } from "@/models/bills/create-bill.dto";
 import { IUpdateBillDto } from "@/models/bills/update-bill.dto";
@@ -149,7 +148,7 @@ export const BillProvider: React.FC<{ children: React.ReactNode }> = ({
         )
       ).data?.data;
 
-      setDebitSum(billsCreditSum);
+      setCreditSum(billsCreditSum);
     } catch (err: any) {
       console.log(err);
     }

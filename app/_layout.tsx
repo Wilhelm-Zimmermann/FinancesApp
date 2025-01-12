@@ -1,6 +1,4 @@
 import { AuthProvider } from "@/contexts/AuthContext/AuthContext";
-import { BillProvider } from "@/contexts/BillsContext/BillContext";
-import { BillTypeProvider } from "@/contexts/BillTypeContext/BillTypeContext";
 import { ThemeProvider } from "@/contexts/ThemeContext/ThemeContext";
 import { useFonts } from "expo-font";
 import { Slot } from "expo-router";
@@ -29,12 +27,8 @@ export default function RootLayout() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <BillProvider>
-          <BillTypeProvider>
-            <Slot />
-            <StatusBar style="dark" />
-          </BillTypeProvider>
-        </BillProvider>
+        <Slot />
+        <StatusBar style="dark" />
       </AuthProvider>
     </ThemeProvider>
   );
