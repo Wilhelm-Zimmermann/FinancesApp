@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "FinancesApp",
-    "slug": "FinancesApp",
+    "name": "Financerep",
+    "slug": "Financerep",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/financeicon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,

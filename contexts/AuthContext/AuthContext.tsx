@@ -25,8 +25,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const userLoginBody = new URLSearchParams();
       userLoginBody.append("grant_type", "password");
-      userLoginBody.append("username", userLogin.username);
-      userLoginBody.append("password", userLogin.password);
+      userLoginBody.append("username", userLogin.username.trim());
+      userLoginBody.append("password", userLogin.password.trim());
       userLoginBody.append("client_id", "postman");
       userLoginBody.append(
         "client_secret",

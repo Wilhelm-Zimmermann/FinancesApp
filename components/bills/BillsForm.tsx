@@ -24,9 +24,9 @@ interface IBillsFormProps {
 }
 
 export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
-  const [billForm, setBillForm] = useState<ICreateBillDto>(
-    {} as ICreateBillDto
-  );
+  const [billForm, setBillForm] = useState<ICreateBillDto>({
+    effectiveDate: new Date(),
+  } as ICreateBillDto);
   const { create, update, getBillById, deleteBill } = useBills();
   const { billTypes, getBillTypes } = useBillType();
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -64,10 +64,15 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
   };
 
   const handleSubmitForm = (data: ICreateBillDto) => {
+    const dataToSend: ICreateBillDto = {
+      ...data,
+      price: parseCurrencyForSubmission(data.price.toString()),
+    };
+
     if (actionType === "create") {
-      handleCreatebill(data);
+      handleCreatebill(dataToSend);
     } else {
-      handleUpdateBill({ ...data, id: id });
+      handleUpdateBill({ ...dataToSend, id: id });
     }
   };
 
@@ -76,6 +81,28 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
       getBillTypes();
     }, [])
   );
+
+  const parseCurrencyForSubmission = (value: string): number => {
+    return parseFloat(value.replace(/\D/g, "")) / 100;
+  };
+
+  const formatCurrency = (value: string | number): string => {
+    if (value === null || value === undefined) return "";
+
+    const numericValue =
+      typeof value === "string"
+        ? parseFloat(value.replace(/[^0-9]/g, ""))
+        : value;
+
+    const number = numericValue / 100;
+
+    const result = number.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+
+    return result;
+  };
 
   return (
     <KeyboardAvoidingView>
@@ -98,11 +125,14 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
                 <Text style={styles.errorText}>{errors.name}</Text>
               )}
               <TextInput
-                value={values.price?.toString()}
+                value={formatCurrency(values.price)}
                 style={styles.inputContainer}
                 placeholder="Valor"
                 keyboardType="number-pad"
-                onChangeText={handleChange("price")}
+                onChangeText={(text) => {
+                  const rawValue = text.replaceAll(/\D/g, "");
+                  setFieldValue("price", rawValue);
+                }}
               />
               {errors.price && (
                 <Text style={styles.errorText}>{errors.price}</Text>
