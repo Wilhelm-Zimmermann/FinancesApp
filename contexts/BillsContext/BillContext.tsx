@@ -15,8 +15,8 @@ import {
 
 interface IBillContextProps {
   bills: BillListDto[];
-  creditSum: number;
-  debitSum: number;
+  creditSum: string;
+  debitSum: string;
   create: (data: ICreateBillDto) => void;
   update: (data: IUpdateBillDto) => void;
   deleteBill: (id: string) => void;
@@ -32,8 +32,13 @@ export const BillProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [bills, setBills] = useState<BillListDto[]>([]);
-  const [creditSum, setCreditSum] = useState<number>(0);
-  const [debitSum, setDebitSum] = useState<number>(0);
+  const [creditSum, setCreditSum] = useState<string>("");
+  const [debitSum, setDebitSum] = useState<string>("");
+
+  const BRL = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
 
   const create = useCallback(
     async (data: ICreateBillDto) => {
@@ -130,7 +135,7 @@ export const BillProvider: React.FC<{ children: React.ReactNode }> = ({
         )
       ).data?.data;
 
-      setDebitSum(billsDebitSum);
+      setDebitSum(BRL.format(billsDebitSum));
     } catch (err: any) {
       console.log(err);
     }
@@ -148,7 +153,7 @@ export const BillProvider: React.FC<{ children: React.ReactNode }> = ({
         )
       ).data?.data;
 
-      setCreditSum(billsCreditSum);
+      setCreditSum(BRL.format(billsCreditSum));
     } catch (err: any) {
       console.log(err);
     }
