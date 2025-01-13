@@ -18,6 +18,9 @@ import { useBillType } from "@/contexts/BillTypeContext/BillTypeContext";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { IUpdateBillDto } from "@/models/bills/update-bill.dto";
 import { defaultColors } from "@/contexts/ThemeContext/defaultColors";
+import { ECurrency } from "@/models/bills/enums/ECurrency";
+import { EPaymentStatus } from "@/models/bills/enums/EPaymentStatus";
+import { ERecurrencyPattern } from "@/models/bills/enums/ERecurrencyPattern";
 
 interface IBillsFormProps {
   actionType?: "create" | "update";
@@ -26,6 +29,10 @@ interface IBillsFormProps {
 export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
   const [billForm, setBillForm] = useState<ICreateBillDto>({
     effectiveDate: new Date(),
+    currency: ECurrency.BRL,
+    isRecurring: false,
+    paymentStatus: EPaymentStatus.Paid,
+    recurrencePattern: ERecurrencyPattern.None,
   } as ICreateBillDto);
   const { create, update, getBillById, deleteBill } = useBills();
   const { billTypes, getBillTypes } = useBillType();
@@ -38,10 +45,14 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
       billTypeId: currentBill?.billTypeId ?? "",
       description: currentBill?.description ?? "",
       effectiveDate: new Date(currentBill?.effectiveDate ?? new Date()),
-      transactionType: currentBill?.transactionType == "Debit" ? 1 : 0,
+      transactionType: currentBill?.transactionType ?? "Debit",
       paidDate: new Date(currentBill?.paidDate ?? new Date()),
       name: currentBill?.name ?? "",
       price: currentBill?.price ?? 0,
+      currency: ECurrency.BRL,
+      isRecurring: false,
+      paymentStatus: EPaymentStatus.Paid,
+      recurrencePattern: ERecurrencyPattern.None,
     });
   }, [billForm]);
 
@@ -154,11 +165,11 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
                     items={[
                       {
                         label: "Débito",
-                        value: 1,
+                        value: "Debit",
                       },
                       {
                         label: "Crédito",
-                        value: 0,
+                        value: "Credit",
                       },
                     ]}
                     component={PickerFormik}
