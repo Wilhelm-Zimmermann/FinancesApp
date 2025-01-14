@@ -31,6 +31,8 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
       elevation: 1,
       marginBottom: 8,
       borderRadius: 4,
+      borderWidth: 1,
+      borderColor: defaultColors.gray200,
     },
     leftSideContent: {
       display: "flex",
@@ -44,8 +46,8 @@ export const BillListItem = ({ bill }: BillListItemProps) => {
       fontSize: 24,
       color:
         bill.transactionType == "Credit"
-          ? defaultColors.green600
-          : defaultColors.red600,
+          ? defaultColors.green500
+          : defaultColors.red500,
     },
   });
 
