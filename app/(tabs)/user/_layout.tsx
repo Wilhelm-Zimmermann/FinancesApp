@@ -6,7 +6,7 @@ export default function UserStack() {
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ headerShown: true, title: "User Profile" }}
+        options={{ headerShown: true, title: "Perfil" }}
       />
     </Stack>
   );

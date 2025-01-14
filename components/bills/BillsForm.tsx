@@ -48,7 +48,8 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
       transactionType: currentBill?.transactionType ?? "Debit",
       paidDate: new Date(currentBill?.paidDate ?? new Date()),
       name: currentBill?.name ?? "",
-      price: currentBill?.price ?? 0,
+      // * 100 is to work with the currency mask.
+      price: currentBill?.price ? currentBill.price * 100 : 0,
       currency: ECurrency.BRL,
       isRecurring: false,
       paymentStatus: EPaymentStatus.Paid,
@@ -244,7 +245,12 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
                   ]}
                   onPress={() => handleSubmit()}
                 >
-                  <Text style={{ fontSize: 18, color: "white" }}>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      color: "white",
+                    }}
+                  >
                     {actionType === "update" ? "Atualizar" : "Criar"}
                   </Text>
                 </Pressable>
@@ -301,9 +307,9 @@ const styles = StyleSheet.create({
   createButton: {
     display: "flex",
     flexDirection: "row",
+    justifyContent: "center",
     textAlign: "center",
     alignItems: "center",
-    width: 100,
     padding: 10,
     marginTop: 10,
     backgroundColor: defaultColors.green500,
@@ -312,9 +318,9 @@ const styles = StyleSheet.create({
   deleteButton: {
     display: "flex",
     flexDirection: "row",
+    justifyContent: "center",
     textAlign: "center",
     alignItems: "center",
-    width: 100,
     padding: 10,
     marginTop: 10,
     backgroundColor: defaultColors.red500,
