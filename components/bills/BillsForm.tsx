@@ -8,9 +8,10 @@ import {
   View,
 } from "react-native";
 import { useCallback, useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ICreateBillDto } from "@/models/bills/create-bill.dto";
 import { useBills } from "@/contexts/BillsContext/BillContext";
-import { Formik, Field } from "formik";
 import { billFormValidationSchema } from "./validations/bill-form.validation";
 import { DatePickerFormik } from "../shared/form/DatePickerFormik";
 import { PickerFormik } from "../shared/form/PickerFormik";
@@ -33,10 +34,34 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
     isRecurring: false,
     paymentStatus: EPaymentStatus.Paid,
     recurrencePattern: ERecurrencyPattern.None,
+    // Initialize other fields as needed
+    name: "",
+    description: "",
+    price: 0,
+    transactionType: "Debit",
+    billTypeId: "",
+    paidDate: new Date(),
   } as ICreateBillDto);
+
   const { create, update, getBillById, deleteBill } = useBills();
   const { billTypes, getBillTypes } = useBillType();
   const { id } = useLocalSearchParams<{ id: string }>();
+
+  // Initialize react-hook-form with defaultValues from state and Yup validation.
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ICreateBillDto>({
+    defaultValues: billForm,
+    resolver: zodResolver(billFormValidationSchema),
+  });
+
+  // Update the form values when billForm changes.
+  useEffect(() => {
+    reset(billForm);
+  }, [billForm, reset]);
 
   const fetchCurrentBill = useCallback(async () => {
     const currentBill = await getBillById(id);
@@ -48,45 +73,20 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
       transactionType: currentBill?.transactionType ?? "Debit",
       paidDate: new Date(currentBill?.paidDate ?? new Date()),
       name: currentBill?.name ?? "",
-      // * 100 is to work with the currency mask.
+      // Multiply by 100 to work with the currency mask.
       price: currentBill?.price ? currentBill.price * 100 : 0,
       currency: ECurrency.BRL,
       isRecurring: false,
       paymentStatus: EPaymentStatus.Paid,
       recurrencePattern: ERecurrencyPattern.None,
     });
-  }, [billForm]);
+  }, [id, getBillById]);
 
   useEffect(() => {
     if (actionType === "update") {
       fetchCurrentBill();
     }
-  }, [id]);
-
-  const handleDeleteBill = () => {
-    if (billForm.id) deleteBill(billForm.id);
-  };
-
-  const handleCreatebill = (data: ICreateBillDto) => {
-    create(data);
-  };
-
-  const handleUpdateBill = (data: IUpdateBillDto) => {
-    update(data);
-  };
-
-  const handleSubmitForm = (data: ICreateBillDto) => {
-    const dataToSend: ICreateBillDto = {
-      ...data,
-      price: parseCurrencyForSubmission(data.price.toString()),
-    };
-
-    if (actionType === "create") {
-      handleCreatebill(dataToSend);
-    } else {
-      handleUpdateBill({ ...dataToSend, id: id });
-    }
-  };
+  }, [id, fetchCurrentBill, actionType]);
 
   useFocusEffect(
     useCallback(() => {
@@ -108,156 +108,212 @@ export const BillsForm = ({ actionType = "create" }: IBillsFormProps) => {
 
     const number = numericValue / 100;
 
-    const result = number.toLocaleString("pt-BR", {
+    return number.toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
     });
+  };
 
-    return result;
+  const handleSubmitForm = (data: ICreateBillDto) => {
+    const dataToSend: ICreateBillDto = {
+      ...data,
+      price: parseCurrencyForSubmission(data.price.toString()),
+    };
+
+    if (actionType === "create") {
+      create(dataToSend);
+    } else {
+      update({ ...dataToSend, id: id } as IUpdateBillDto);
+    }
+  };
+
+  const handleDeleteBill = () => {
+    if (billForm.id) deleteBill(billForm.id);
   };
 
   return (
     <KeyboardAvoidingView>
       <ScrollView>
-        <Formik
-          initialValues={billForm}
-          onSubmit={handleSubmitForm}
-          validationSchema={billFormValidationSchema}
-          enableReinitialize
-        >
-          {({ handleChange, handleSubmit, values, errors, setFieldValue }) => (
-            <View style={styles.formContainer}>
+        <View style={styles.formContainer}>
+          {/* Name Field */}
+          <Controller
+            control={control}
+            name="name"
+            render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                value={values.name}
+                value={value}
                 style={styles.inputContainer}
                 placeholder="Nome"
-                onChangeText={handleChange("name")}
+                onChangeText={onChange}
+                onBlur={onBlur}
               />
-              {errors.name && (
-                <Text style={styles.errorText}>{errors.name}</Text>
-              )}
+            )}
+          />
+          {errors.name && (
+            <Text style={styles.errorText}>{errors.name.message}</Text>
+          )}
+
+          {/* Price Field */}
+          <Controller
+            control={control}
+            name="price"
+            render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                value={formatCurrency(values.price)}
+                value={formatCurrency(value)}
                 style={styles.inputContainer}
                 placeholder="Valor"
                 keyboardType="number-pad"
                 onChangeText={(text) => {
-                  const rawValue = text.replaceAll(/\D/g, "");
-                  setFieldValue("price", rawValue);
+                  const rawValue = text.replace(/\D/g, "");
+                  onChange(rawValue);
                 }}
+                onBlur={onBlur}
               />
-              {errors.price && (
-                <Text style={styles.errorText}>{errors.price}</Text>
-              )}
+            )}
+          />
+          {errors.price && (
+            <Text style={styles.errorText}>{errors.price.message}</Text>
+          )}
+
+          {/* Description Field */}
+          <Controller
+            control={control}
+            name="description"
+            render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                value={values.description}
+                value={value}
                 style={[styles.inputContainer, { height: 100 }]}
                 placeholder="Descrição"
-                onChangeText={handleChange("description")}
+                onChangeText={onChange}
+                onBlur={onBlur}
               />
-              {errors.description && (
-                <Text style={styles.errorText}>{errors.description}</Text>
-              )}
-              <View style={styles.twoColumns}>
-                <View style={[styles.fieldContainer, { width: "50%" }]}>
-                  <Field
-                    name="transactionType"
+            )}
+          />
+          {errors.description && (
+            <Text style={styles.errorText}>{errors.description.message}</Text>
+          )}
+
+          {/* Two Columns for Pickers */}
+          <View style={styles.twoColumns}>
+            {/* Transaction Type Picker */}
+            <View style={[styles.fieldContainer, { width: "50%" }]}>
+              <Controller
+                control={control}
+                name="transactionType"
+                render={({ field: { onChange, value } }) => (
+                  <PickerFormik
                     title="Tipo de transação"
                     items={[
-                      {
-                        label: "Débito",
-                        value: "Debit",
-                      },
-                      {
-                        label: "Crédito",
-                        value: "Credit",
-                      },
+                      { label: "Débito", value: "Debit" },
+                      { label: "Crédito", value: "Credit" },
                     ]}
-                    component={PickerFormik}
+                    selectedValue={value}
+                    onValueChange={onChange}
                   />
-                  {errors.transactionType && (
-                    <Text style={styles.errorText}>
-                      {errors.transactionType}
-                    </Text>
-                  )}
-                </View>
-
-                <View style={[styles.fieldContainer, { width: "50%" }]}>
-                  <Field
-                    name="billTypeId"
-                    title="Tipo da conta"
-                    items={billTypes.map((billType) => {
-                      return {
-                        label: billType.type,
-                        value: billType.id,
-                      };
-                    })}
-                    component={PickerFormik}
-                  />
-                  {errors.billTypeId && (
-                    <Text style={styles.errorText}>{errors.billTypeId}</Text>
-                  )}
-                </View>
-              </View>
-              <View style={styles.twoColumns}>
-                <View style={[styles.fieldContainer, { width: "50%" }]}>
-                  <Field
-                    name="effectiveDate"
-                    title="Data de vencimento: "
-                    component={DatePickerFormik}
-                  />
-                  {errors.effectiveDate &&
-                    typeof errors.effectiveDate === "string" && (
-                      <Text style={styles.errorText}>
-                        {errors.effectiveDate}
-                      </Text>
-                    )}
-                </View>
-                <View style={[styles.fieldContainer, { width: "50%" }]}>
-                  <Field
-                    name="paiedDate"
-                    title="Data de pagamento: "
-                    component={DatePickerFormik}
-                  />
-                  {errors.paidDate && typeof errors.paidDate === "string" && (
-                    <Text style={styles.errorText}>{errors.paidDate}</Text>
-                  )}
-                </View>
-              </View>
-              <View style={styles.actionsContainer}>
-                {actionType === "update" && (
-                  <Pressable
-                    style={({ pressed }) => [
-                      styles.deleteButton,
-                      pressed && styles.deleteButtonPressed,
-                    ]}
-                    onPress={() => handleDeleteBill()}
-                  >
-                    <Text style={{ fontSize: 18, color: "white" }}>
-                      Deletar
-                    </Text>
-                  </Pressable>
                 )}
-                <Pressable
-                  style={({ pressed }) => [
-                    styles.createButton,
-                    pressed && styles.createButtonPressed,
-                  ]}
-                  onPress={() => handleSubmit()}
-                >
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      color: "white",
-                    }}
-                  >
-                    {actionType === "update" ? "Atualizar" : "Criar"}
-                  </Text>
-                </Pressable>
-              </View>
+              />
+              {errors.transactionType && (
+                <Text style={styles.errorText}>
+                  {errors.transactionType.message}
+                </Text>
+              )}
             </View>
-          )}
-        </Formik>
+
+            {/* Bill Type Picker */}
+            <View style={[styles.fieldContainer, { width: "50%" }]}>
+              <Controller
+                control={control}
+                name="billTypeId"
+                render={({ field: { onChange, value } }) => (
+                  <PickerFormik
+                    title="Tipo da conta"
+                    items={billTypes.map((billType) => ({
+                      label: billType.type,
+                      value: billType.id,
+                    }))}
+                    selectedValue={value}
+                    onValueChange={onChange}
+                  />
+                )}
+              />
+              {errors.billTypeId && (
+                <Text style={styles.errorText}>
+                  {errors.billTypeId.message}
+                </Text>
+              )}
+            </View>
+          </View>
+
+          {/* Two Columns for DatePickers */}
+          <View style={styles.twoColumns}>
+            {/* Effective Date */}
+            <View style={[styles.fieldContainer, { width: "50%" }]}>
+              <Controller
+                control={control}
+                name="effectiveDate"
+                render={({ field: { onChange, value } }) => (
+                  <DatePickerFormik
+                    title="Data de vencimento: "
+                    date={value}
+                    onDateChange={onChange}
+                  />
+                )}
+              />
+              {errors.effectiveDate && (
+                <Text style={styles.errorText}>
+                  {errors.effectiveDate.message}
+                </Text>
+              )}
+            </View>
+            {/* Paid Date */}
+            <View style={[styles.fieldContainer, { width: "50%" }]}>
+              <Controller
+                control={control}
+                name="paidDate"
+                render={({ field: { onChange, value } }) => (
+                  <DatePickerFormik
+                    title="Data de pagamento: "
+                    date={value}
+                    onDateChange={onChange}
+                  />
+                )}
+              />
+              {errors.paidDate && (
+                <Text style={styles.errorText}>
+                  {errors.paidDate.message}
+                </Text>
+              )}
+            </View>
+          </View>
+
+          {/* Action Buttons */}
+          <View style={styles.actionsContainer}>
+            {actionType === "update" && (
+              <Pressable
+                style={({ pressed }) => [
+                  styles.deleteButton,
+                  pressed && styles.deleteButtonPressed,
+                ]}
+                onPress={handleDeleteBill}
+              >
+                <Text style={{ fontSize: 18, color: "white" }}>
+                  Deletar
+                </Text>
+              </Pressable>
+            )}
+            <Pressable
+              style={({ pressed }) => [
+                styles.createButton,
+                pressed && styles.createButtonPressed,
+              ]}
+              onPress={handleSubmit(handleSubmitForm)}
+            >
+              <Text style={{ fontSize: 18, color: "white" }}>
+                {actionType === "update" ? "Atualizar" : "Criar"}
+              </Text>
+            </Pressable>
+          </View>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
